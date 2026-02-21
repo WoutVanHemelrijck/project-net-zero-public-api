@@ -1,0 +1,2 @@
+[console_scripts]
+ecofy = ecofy.cli:main
