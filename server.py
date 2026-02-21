@@ -1,10 +1,21 @@
 """Project Net Zero optimization API server."""
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
 app = FastAPI(title="Project Net Zero API")
+
+security = HTTPBearer()
+
+
+def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
+    """Validate the Bearer token. For now, accept any non-empty token (demo mode)."""
+    token = credentials.credentials
+    if token != "token":
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return token
 
 OPTIMIZER_URL = "https://web-production-4e9fb.up.railway.app/optimize"
 
@@ -18,7 +29,7 @@ class OptimizeResponse(BaseModel):
 
 
 @app.post("/optimize")
-async def optimize(request: OptimizeRequest) -> OptimizeResponse:
+async def optimize(request: OptimizeRequest, _token: str = Depends(verify_token)) -> OptimizeResponse:
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(

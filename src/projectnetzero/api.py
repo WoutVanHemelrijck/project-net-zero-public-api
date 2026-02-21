@@ -11,12 +11,13 @@ class ProjectNetZeroAPIError(Exception):
     """Raised when the optimization API returns an error."""
 
 
-def optimize(source_code: str, *, base_url: str = DEFAULT_BASE_URL) -> str:
+def optimize(source_code: str, *, base_url: str = DEFAULT_BASE_URL, token: str | None = None) -> str:
     """Send source code to the backend and return the optimized version.
 
     Args:
         source_code: The Python source code to optimize.
         base_url: Base URL of the optimization API.
+        token: Bearer token for authentication.
 
     Returns:
         The optimized Python source code.
@@ -26,9 +27,14 @@ def optimize(source_code: str, *, base_url: str = DEFAULT_BASE_URL) -> str:
     """
     url = f"{base_url.rstrip('/')}/optimize"
 
+    headers = {}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
     response = httpx.post(
         url,
         json={"source_code": source_code},
+        headers=headers,
         timeout=120,
     )
 

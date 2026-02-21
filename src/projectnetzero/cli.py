@@ -9,6 +9,7 @@ import click
 
 from projectnetzero import __version__
 from projectnetzero.api import DEFAULT_BASE_URL, ProjectNetZeroAPIError, optimize
+from projectnetzero.auth import load_token, save_token
 from projectnetzero.runner import run_optimized
 
 
@@ -32,12 +33,17 @@ def run(file: Path, api_url: str) -> None:
 
     The original FILE is never modified.
     """
+    token = load_token()
+    if not token:
+        click.echo("No token found. Run 'projectnetzero login' first.", err=True)
+        sys.exit(1)
+
     source_code = file.read_text(encoding="utf-8")
 
     click.echo(f"Sending {file} to optimization API at {api_url} ...")
 
     try:
-        optimized_code = optimize(source_code, base_url=api_url)
+        optimized_code = optimize(source_code, base_url=api_url, token=token)
     except ProjectNetZeroAPIError as exc:
         click.echo(f"Error: {exc}", err=True)
         sys.exit(1)
@@ -48,3 +54,14 @@ def run(file: Path, api_url: str) -> None:
     click.echo("Running optimized version ...\n")
     exit_code = run_optimized(optimized_code, file)
     sys.exit(exit_code)
+
+
+@main.command()
+def login() -> None:
+    """Save an authentication token for the Project Net Zero API."""
+    token = click.prompt("Enter your API token", hide_input=True)
+    if not token.strip():
+        click.echo("Token cannot be empty.", err=True)
+        sys.exit(1)
+    save_token(token)
+    click.echo("Token saved successfully.")
