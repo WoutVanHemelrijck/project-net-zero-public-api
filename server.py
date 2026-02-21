@@ -9,7 +9,7 @@ app = FastAPI(title="Project Net Zero API")
 
 security = HTTPBearer()
 
-OPTIMIZER_URL = "https://web-production-4e9fb.up.railway.app/optimize"
+OPTIMIZER_URL = "http://project-net-zero-backend.railway.internal:8080/optimize"
 
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
