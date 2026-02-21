@@ -1,9 +1,12 @@
 """Project Net Zero optimization API server."""
 
-from fastapi import FastAPI
+import httpx
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI(title="Project Net Zero API")
+
+OPTIMIZER_URL = "https://web-production-4e9fb.up.railway.app/optimize"
 
 
 class OptimizeRequest(BaseModel):
@@ -14,18 +17,26 @@ class OptimizeResponse(BaseModel):
     optimized_code: str
 
 
-def optimizer(source_code: str) -> str:
-    """Optimize Python source code for lower CO2 emissions.
-
-    TODO: Replace this stub with the actual optimization logic.
-    """
-    return source_code
-
-
 @app.post("/optimize")
-def optimize(request: OptimizeRequest) -> OptimizeResponse:
-    optimized = optimizer(request.source_code)
-    return OptimizeResponse(optimized_code=optimized)
+async def optimize(request: OptimizeRequest) -> OptimizeResponse:
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(
+                OPTIMIZER_URL,
+                json={"source_code": request.source_code},
+                timeout=120,
+            )
+        except httpx.RequestError as exc:
+            raise HTTPException(status_code=502, detail=f"Optimizer unreachable: {exc}")
+
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail=f"Optimizer error: {response.text}",
+        )
+
+    data = response.json()
+    return OptimizeResponse(optimized_code=data["optimized_code"])
 
 
 @app.get("/health")
