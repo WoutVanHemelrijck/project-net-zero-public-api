@@ -12,7 +12,7 @@ app = FastAPI(title="Project Net Zero API")
 security = HTTPBearer()
 
 OPTIMIZER_URL = os.environ.get(
-    "OPTIMIZER_URL", "http://project-net-zero-backend.railway.internal:8080/optimize"
+    "OPTIMIZER_URL", "https://project-net-zero-backend-production.up.railway.app/optimize"
 )
 
 
