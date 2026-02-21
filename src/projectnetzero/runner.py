@@ -27,7 +27,7 @@ def run_optimized(optimized_code: str, original_path: Path) -> int:
         mode="w",
         suffix=".py",
         dir=work_dir,
-        prefix=".ecofy_",
+        prefix=".projectnetzero_",
         delete=True,
     ) as tmp:
         tmp.write(optimized_code)

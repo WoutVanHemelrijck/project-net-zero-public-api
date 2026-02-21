@@ -1,4 +1,4 @@
-"""Ecofy CLI - optimize and run Python code with lower CO2 emissions."""
+"""Project Net Zero CLI - optimize and run Python code with lower CO2 emissions."""
 
 from __future__ import annotations
 
@@ -7,15 +7,15 @@ from pathlib import Path
 
 import click
 
-from ecofy import __version__
-from ecofy.api import DEFAULT_BASE_URL, EcofyAPIError, optimize
-from ecofy.runner import run_optimized
+from projectnetzero import __version__
+from projectnetzero.api import DEFAULT_BASE_URL, ProjectNetZeroAPIError, optimize
+from projectnetzero.runner import run_optimized
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="ecofy")
+@click.version_option(version=__version__, prog_name="projectnetzero")
 def main() -> None:
-    """Ecofy - Optimize your Python code for lower CO2 emissions."""
+    """Project Net Zero - Optimize your Python code for lower CO2 emissions."""
 
 
 @main.command()
@@ -23,7 +23,7 @@ def main() -> None:
 @click.option(
     "--api-url",
     default=DEFAULT_BASE_URL,
-    envvar="ECOFY_API_URL",
+    envvar="PROJECTNETZERO_API_URL",
     help="Base URL of the optimization API.",
     show_default=True,
 )
@@ -38,7 +38,7 @@ def run(file: Path, api_url: str) -> None:
 
     try:
         optimized_code = optimize(source_code, base_url=api_url)
-    except EcofyAPIError as exc:
+    except ProjectNetZeroAPIError as exc:
         click.echo(f"Error: {exc}", err=True)
         sys.exit(1)
     except Exception as exc:

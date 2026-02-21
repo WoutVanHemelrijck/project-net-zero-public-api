@@ -3,7 +3,7 @@ requires = ["setuptools>=68.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ecofy"
+name = "projectnetzero"
 version = "0.1.0"
 description = "Optimize your Python code for lower CO2 emissions"
 requires-python = ">=3.10"
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-ecofy = "ecofy.cli:main"
+projectnetzero = "projectnetzero.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

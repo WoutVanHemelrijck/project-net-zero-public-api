@@ -1,4 +1,4 @@
-"""Client for the ecofy optimization backend API."""
+"""Client for the Project Net Zero optimization backend API."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import httpx
 DEFAULT_BASE_URL = "http://localhost:8000"
 
 
-class EcofyAPIError(Exception):
+class ProjectNetZeroAPIError(Exception):
     """Raised when the optimization API returns an error."""
 
 
@@ -22,7 +22,7 @@ def optimize(source_code: str, *, base_url: str = DEFAULT_BASE_URL) -> str:
         The optimized Python source code.
 
     Raises:
-        EcofyAPIError: If the API returns a non-success status.
+        ProjectNetZeroAPIError: If the API returns a non-success status.
     """
     url = f"{base_url.rstrip('/')}/optimize"
 
@@ -33,7 +33,7 @@ def optimize(source_code: str, *, base_url: str = DEFAULT_BASE_URL) -> str:
     )
 
     if response.status_code != 200:
-        raise EcofyAPIError(
+        raise ProjectNetZeroAPIError(
             f"API returned status {response.status_code}: {response.text}"
         )
 

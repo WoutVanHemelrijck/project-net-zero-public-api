@@ -9,3 +9,7 @@ src/ecofy.egg-info/dependency_links.txt
 src/ecofy.egg-info/entry_points.txt
 src/ecofy.egg-info/requires.txt
 src/ecofy.egg-info/top_level.txt
+src/ecofy/__pycache__/__init__.cpython-314.pyc
+src/ecofy/__pycache__/api.cpython-314.pyc
+src/ecofy/__pycache__/cli.cpython-314.pyc
+src/ecofy/__pycache__/runner.cpython-314.pyc
