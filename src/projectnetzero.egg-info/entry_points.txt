@@ -1,2 +1,0 @@
-[console_scripts]
-projectnetzero = projectnetzero.cli:main
