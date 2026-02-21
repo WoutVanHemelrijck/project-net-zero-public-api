@@ -1,5 +1,7 @@
 """Project Net Zero optimization API server (proxy)."""
 
+import os
+
 import httpx
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import Response
@@ -9,7 +11,9 @@ app = FastAPI(title="Project Net Zero API")
 
 security = HTTPBearer()
 
-OPTIMIZER_URL = "http://project-net-zero-backend.railway.internal:8080/optimize"
+OPTIMIZER_URL = os.environ.get(
+    "OPTIMIZER_URL", "http://project-net-zero-backend.railway.internal:8080/optimize"
+)
 
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> str:
