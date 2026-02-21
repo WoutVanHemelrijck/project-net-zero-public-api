@@ -1,41 +1,25 @@
-"""Run optimized code in a temporary file without modifying the original."""
+"""Run optimized code from an optimized project directory."""
 
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 
-def run_optimized(optimized_code: str, original_path: Path) -> int:
-    """Write optimized code to a temp file and execute it.
+def run_optimized(optimized_dir: Path, entrypoint: str) -> int:
+    """Run the entrypoint script inside the optimized project directory."""
+    script = optimized_dir / entrypoint
+    if not script.exists():
+        print(f"Error: entrypoint not found: {script}", file=sys.stderr)
+        return 1
 
-    The original file is never modified. The temp file is placed in the same
-    directory so that relative imports and file paths still work.
-
-    Args:
-        optimized_code: The optimized Python source code.
-        original_path: Path to the original file (used to resolve the working directory).
-
-    Returns:
-        The exit code of the executed process.
-    """
-    work_dir = original_path.resolve().parent
-
-    with tempfile.NamedTemporaryFile(
-        mode="w",
-        suffix=".py",
-        dir=work_dir,
-        prefix=".projectnetzero_",
-        delete=True,
-    ) as tmp:
-        tmp.write(optimized_code)
-        tmp.flush()
-
+    try:
         result = subprocess.run(
-            [sys.executable, tmp.name],
-            cwd=work_dir,
+            [sys.executable, str(script)],
+            cwd=optimized_dir,
         )
-
-    return result.returncode
+        return result.returncode
+    finally:
+        shutil.rmtree(optimized_dir, ignore_errors=True)
