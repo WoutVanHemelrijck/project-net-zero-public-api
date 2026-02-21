@@ -35,7 +35,9 @@ Your original file is **never modified**.
 
 ### API URL
 
-By default, the CLI connects to `http://localhost:8000`. You can change this with:
+By default, the CLI connects to `https://web-production-4e0ee.up.railway.app`. No configuration needed.
+
+To use a different API server:
 
 ```bash
 # Using the --api-url flag

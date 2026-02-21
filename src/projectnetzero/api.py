@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-DEFAULT_BASE_URL = "http://localhost:8000"
+DEFAULT_BASE_URL = "https://web-production-4e0ee.up.railway.app"
 
 
 class ProjectNetZeroAPIError(Exception):
