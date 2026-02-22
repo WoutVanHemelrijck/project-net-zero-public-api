@@ -2,6 +2,8 @@
 
 A CLI tool that optimizes your Python code for lower CO2 emissions. Send your code to an optimization backend, get an optimized version back, and run it — without ever modifying your original file.
 
+IMPORTANT FOR HACKEUROPE: This repository only contains the CLI Python package used to interact with our tool. The core optimisation logic is implemented in a separate repository: https://github.com/william-popmie/project-net-zero-backend
+
 ## Installation
 
 ```bash
